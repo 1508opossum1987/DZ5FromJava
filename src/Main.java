@@ -26,7 +26,7 @@ void main() {
     System.out.println(students.size());*/
 
     //2.
-    Path path = Paths.get("notes.txt");
+    /*Path path = Paths.get("notes.txt");
     try {
         Files.createFile(path);
         System.out.println("Файл создан: " + path);
@@ -59,6 +59,38 @@ void main() {
         }
     } catch (IOException e) {
         System.err.println("Ошибка: " + e.getMessage());
+    }*/
+
+
+    //2.Alternate
+    /*Path path = Paths.get("notes.txt");
+
+    String[] strok = {
+            "Александр Блок",
+            "Перед грозой",
+            "Закат горел в последний раз.",
+            "Светило дня спустилось в тучи,",
+            "И их края в прощальный час",
+            "Горели пламенем могучим."
+    };
+
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(path.toFile()))) {
+        for (String s : strok) {
+            writer.write(s);
+            writer.newLine();
+        }
+        System.out.println("Файл успешно записан");
+    } catch (IOException e) {
+        System.err.println("Ошибка при записи: " + e.getMessage());
     }
 
+    try (BufferedReader reader = new BufferedReader(new FileReader(path.toFile()))) {
+        System.out.println("Содержимое файла:");
+        String line;
+        while ((line = reader.readLine()) != null) {
+            System.out.println(line);
+        }
+    } catch (IOException e) {
+        System.err.println("Ошибка при чтении: " + e.getMessage());
+    }*/
 }
