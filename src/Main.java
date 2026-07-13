@@ -74,7 +74,7 @@ void main() {
             "Горели пламенем могучим."
     };
 
-    try (BufferedWriter writer = new BufferedWriter(new FileWriter(path.toFile()))) {
+    try (BufferedWriter writer = Files.newBufferedWriter(path, StandardOpenOption.APPEND)) {
         for (String s : strok) {
             writer.write(s);
             writer.newLine();
@@ -84,7 +84,7 @@ void main() {
         System.err.println("Ошибка при записи: " + e.getMessage());
     }
 
-    try (BufferedReader reader = new BufferedReader(new FileReader(path.toFile()))) {
+    try (BufferedReader reader = Files.newBufferedReader(path)) {
         System.out.println("Содержимое файла:");
         String line;
         while ((line = reader.readLine()) != null) {
@@ -93,4 +93,96 @@ void main() {
     } catch (IOException e) {
         System.err.println("Ошибка при чтении: " + e.getMessage());
     }*/
+
+    //3.
+
+    /*(List<Integer> numbers = new ArrayList<>();
+
+    // создадим список из 20 рандомных чисел от 1 до 100
+    Random rand = new Random();
+
+    System.out.println("Исходная коллекция из 20 целых чисел от 1 до 100: ");
+    for (int i =0; i<20;i++){
+        numbers.add(rand.nextInt(100)+1);
+    }
+    System.out.println(numbers);
+
+    List<Integer> result = numbers.stream()
+            .filter(n->n%2==0)
+            .map(n->n*2)
+            .sorted(Comparator.reverseOrder())
+            .collect(Collectors.toList());
+    System.out.println("Результат: ");
+    System.out.println(result);
+
+    int sum = result.stream()
+            .mapToInt(Integer::intValue)
+            .sum();
+
+    System.out.println("Сумма чисел: ");
+    System.out.println(sum);*/
+
+    //4.
+
+    List<Student> students = new ArrayList<> ();
+    students.add(new Student("Alex", 17, 4.67));
+    students.add(new Student("Voldemar", 23, 3.12));
+    students.add(new Student("Sophia", 20, 4.11));
+    students.add(new Student("George", 17, 2.08));
+    students.add(new Student("John", 18, 4.55));
+    students.add(new Student("Christy", 19, 4.97));
+    students.add(new Student("Joshua", 21, 4.01));
+    students.add(new Student("Suzanna", 18, 3.17));
+    students.add(new Student("Bob", 20, 3.33));
+    students.add(new Student("Kyle", 22, 4.07));
+
+    System.out.println("Весь список студентов: ");
+    System.out.println(
+            students.stream()
+                    .map(Student::toString)
+                    .collect(Collectors.joining())
+    );
+
+    List<Student> overFrom18 = students.stream()
+            .filter(s -> s.getAge() > 18)
+            .collect(Collectors.toList());
+
+    System.out.println("Студенты старше 18 лет: ");
+    overFrom18.forEach(System.out::print);
+    System.out.println();
+
+    List<Student> sortedByGrade = students.stream()
+            .sorted(new StudentComparator())
+            .collect(Collectors.toList());
+
+    System.out.println("Сортировка по среднему баллу: ");
+    sortedByGrade.forEach(System.out::print);
+    System.out.println();
+
+    List<String> namesFromOver45 = students.stream()
+            .filter(s->s.getGrade()>4.5)
+            .map(Student::getName)
+            .collect(Collectors.toList());
+
+    System.out.println("Имена студентов с баллом выше 4.5: ");
+    namesFromOver45.forEach(System.out::println);
+    System.out.println();
+
+    String bestStudent = students.stream()
+            .max(new StudentComparator())
+            .map(Student::getName)
+            .get();
+
+    System.out.println("Студент с самым высоким баллом: "+bestStudent);
+    System.out.println();
+
+    double sumOfGrades = students.stream()
+            .mapToDouble(Student::getGrade)
+            .sum();
+
+    double averageGrade = Math.round((sumOfGrades / students.size()) * 100.0) / 100.0;
+    System.out.println("Средняя оценка группы: "+averageGrade);
+
+    //5.
+
 }
