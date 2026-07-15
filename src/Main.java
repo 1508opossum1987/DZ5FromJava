@@ -337,11 +337,72 @@ void main() {
     System.out.println(fromYoungestYear);
     System.out.println();
 
+    List<Book> sortedByTitle = books.stream()
+            .sorted(Comparator.comparing(Book::getTitle))
+            .collect(Collectors.toList());
 
+    System.out.println("Отсортированные книги по названию: ");
+    for (Book b: sortedByTitle){
+        System.out.println(b);
+    }
+    System.out.println();
 
+    List<Book> sortedByYear = books.stream()
+            .sorted(new BookComparator())
+            .collect(Collectors.toList());
 
+    System.out.println("Отсортированные книги по году издания: ");
+    for (Book b: sortedByYear){
+        System.out.println(b);
+    }
+    System.out.println();
 
+    List<Book> isAvailable = books.stream()
+            .filter(Book::isAvailable)
+            .collect(Collectors.toList());
 
+    System.out.println("Доступные книги: ");
+    for (Book b: isAvailable){
+        System.out.println(b);
+    }
+    System.out.println();
 
+    int sumOfPrices = books.stream()
+            .mapToInt(Book::getPages)
+            .sum();
 
+    System.out.println("Среднее количество страниц: "+sumOfPrices/books.size());
+    System.out.println();
+
+    Book biggestPagesBook = books.stream()
+            .max(Comparator.comparing(Book::getPages))
+            .get();
+
+    System.out.println("Книга с максимальным количеством страниц: "+biggestPagesBook);
+    System.out.println();
+
+    Map<String, List<Book>> byAuthor = books.stream()
+            .collect(Collectors.groupingBy(Book::getAuthor));
+
+    byAuthor.forEach((author, booksA)->
+        System.out.println(author+": "+booksA.stream().collect(Collectors.toList()))
+    );
+
+    List<String> linesToWrite = new ArrayList<>();
+    byAuthor.forEach((author, booksA) -> {
+        linesToWrite.add("Автор: " + author);
+        booksA.forEach(book -> {
+            linesToWrite.add("  " + book.getTitle() + " (" + book.getYear() + ", " + book.getPages() + " стр.)");
+        });
+        linesToWrite.add("");
+    });
+
+    Path path1 = Paths.get("newBooksList.bin");
+    try{
+        Files.createFile(path1);
+        Files.write(path1, linesToWrite);
+        System.out.println("Файл успешно записан!");
+    } catch (Exception e) {
+        System.err.println("Ошибка при записи: " + e.getMessage());
+    }
 }
